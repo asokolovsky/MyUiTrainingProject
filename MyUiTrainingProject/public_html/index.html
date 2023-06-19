@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <style>
+        #formId{
+            width: 400px;
+            height: 400px;
+            border-style: solid;
+            Overflow-y: auto;
+        }
+        .buttonClass {
+            left:14.4%;
+            position: absolute;
+        }
+        #spinner:not([hidden]) {
+            position: fixed;
+            top: 20%;
+            left: 11%;
+            display: flex;
+        }
+        #spinner::after {
+            content: "";
+            width: 80px;
+            height: 80px;
+            border: 2px solid #f3f3f3;
+            border-top: 3px solid #f25a41;
+            border-radius: 100%;
+            will-change: transform;
+            animation: spin 1s infinite linear;
+        }
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }     
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <form id="formId" >
+        <div hidden id="spinner"></div>
+    </form>
+    <br>
+    <button class="buttonClass" onclick="getQuote();loadData()" type="button" id="getQuote">Load one more random quote</button>
+    <script>
+        const spinner = document.getElementById("spinner");
+        
+        function getQuote(){
+            spinner.removeAttribute("hidden");
+            fetch("https://api.quotable.io/random")
+            .then(response => response.json())  
+                .then(data => {
+                    const quoteForm = document.getElementById('formId');
+                    const quote = document.createElement("div");
+                    const line = document.createElement("br");
+                    quoteForm.insertAdjacentElement("afterbegin", quote);
+                    quoteForm.insertAdjacentElement("afterbegin", line);
+                    spinner.setAttribute("hidden", "");
+                    quote.innerHTML = data.content;
+            });
+        }
+    </script>
+</body>
+</html>
